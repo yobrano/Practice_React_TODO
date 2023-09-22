@@ -1,26 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import {TodoContext} from './TodoContextManager'
+import "../Assets/Styles/todoform.css"
 
 function TodoForm() {
-
-	const [todoItem, setTodoItem] = useState({
-		title: "",
-		startTime: "",
-		endTime: "",
-		isComplete: false,
-		priority: "",
-		notes: [],
-		tags: [],
-
-	})
-	const [noteEntry, setNoteEntry ]= useState("")
-	const [tagEntry, setTagEntry ]= useState("")
 	
-	const startDateRef = useRef()
-	const startTimeRef = useRef()
-	const endDateRef = useRef()
-	const endTimeRef = useRef()
-	const noteEntryRef = useRef()
-	const tagEntryRef = useRef()
+	const {CreateTodoItem, editTodo, setEditTodo, todoList, UpdateTodoItem, EmptyTodoItem} = useContext(TodoContext);
+	
+	const [todoItem, setTodoItem] = useState(()=> editTodo===null?EmptyTodoItem:todoList[editTodo]);
+	const [noteEntry, setNoteEntry ]= useState("");
+	const [tagEntry, setTagEntry ]= useState("");
+
+	const startDateRef = useRef();
+	const startTimeRef = useRef();
+	const endDateRef = useRef();
+	const endTimeRef = useRef();
+	const noteEntryRef = useRef();
+	const tagEntryRef = useRef();
 
 	const handleNoteSubmit = event =>{
 		if(event.key !== "Enter") return
@@ -46,21 +41,31 @@ function TodoForm() {
 			tags:[...tags]
 		})
 
-		noteEntryRef.current.blur()
-		setNoteEntry("")
+		tagEntryRef.current.blur()
+		setTagEntry("")
 	}
+
 	
+	const handleTodoSubmit = event =>{
+		event.preventDefault()
+		if(editTodo===null){
+			CreateTodoItem(todoItem)
+		}else{
+			UpdateTodoItem(editTodo, todoItem)
+			setEditTodo(null)
+		}
+		setTodoItem(EmptyTodoItem);
+		setNoteEntry("");
+		setTagEntry("");
+	}
 
 	useEffect(() => {
-		console.log(todoItem)
+		if(editTodo!==null)setTodoItem(todoList[editTodo])
+	}, [editTodo])
 
-	}, [todoItem])
-	
-
-	
 	
 	return (
-		<section>
+		<aside className='form-container'>
 			{/* Title Etry */}
 			<div>
 				<span>
@@ -197,7 +202,7 @@ function TodoForm() {
 						{todoItem.notes.length === 0?
 						<i>Added notes will appear here.</i>:
 						<ul>
-							{ todoItem.notes.map((note)=><li>{note}</li>)}
+							{ todoItem.notes.map((note, idx)=><li key= {idx}>{note}</li>)}
 						</ul>
 						}
 					
@@ -205,7 +210,7 @@ function TodoForm() {
 				
 			</div>
 			
-			{/* Notes Entry */}
+			{/* Tag Entry */}
 			<div>
 				<span>
 				 	Tags:
@@ -220,14 +225,20 @@ function TodoForm() {
 				{todoItem.tags.length === 0?
 					<i>Added Tags will appear here.</i>:
 					<ul>
-						{ todoItem.tags.map((tag)=><li>{tag}</li>)}
+						{ todoItem.tags.map((tag, idx)=><li key={idx}>{tag}</li>)}
 					</ul>
 				}
 			</div>
 
 			{/* Submit buttons */}
-		</section>
+			<div>
+				<input type="submit"  onClick={handleTodoSubmit}/>
+			</div>
+		</aside>
 	)
 }
+
+
+
 
 export default TodoForm

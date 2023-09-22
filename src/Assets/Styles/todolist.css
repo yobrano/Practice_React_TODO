@@ -1,0 +1,35 @@
+.list-container{
+    display: flex;
+    flex-direction: column;
+}
+.list-header{
+    /* layout */
+    border-radius: 5px 5px ;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.1rem 1rem;
+
+    /* style */    
+    background: #bce651;
+    color: #5c381f;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+.header-item{
+    width: 5rem;
+}
+
+.list-item{
+    /* Layout */
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem 1rem ;
+    border-bottom: 2px solid #6b4327;
+    
+    /* Styling */
+    color: #f0bf8b;
+}
+.body-item{
+    width: 5rem;
+}
+

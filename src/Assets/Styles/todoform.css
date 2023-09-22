@@ -1,0 +1,10 @@
+.form-container{
+
+    /* Layout */
+    display: flex;
+    flex-direction: column;
+
+    /* style */
+    border-left: 1px solid #463427;
+
+}
